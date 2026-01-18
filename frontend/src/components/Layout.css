@@ -17,6 +17,17 @@
   z-index: 100;
 }
 
+/* Hide navbar on mobile FYP for TikTok-style experience */
+.top-nav.fyp-nav {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .top-nav.fyp-nav {
+    display: flex;
+  }
+}
+
 .logo {
   font-size: 24px;
   font-weight: 700;
