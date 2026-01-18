@@ -138,12 +138,21 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
   return (
     <div className="decision-card">
       <div className="decision-header">
-        <Link to={`/profile/${user.id || decision.user_id}`} className="user-link">
-          <div className="user-avatar-small">
-            {user.username?.charAt(0).toUpperCase() || 'U'}
-          </div>
-          <span className="username">{user.username || 'Unknown'}</span>
-        </Link>
+        <div className="header-left">
+          <Link to={`/profile/${user.id || decision.user_id}`} className="user-link">
+            <div className="user-avatar-small">
+              {user.username?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <span className="username">{user.username || 'Unknown'}</span>
+          </Link>
+          <button
+            className="comment-btn-inline"
+            onClick={handleShowComments}
+            title="Comments"
+          >
+            💬 {comments.length}
+          </button>
+        </div>
         <span className="decision-date">
           {new Date(decision.created_at).toLocaleDateString()}
         </span>
@@ -223,50 +232,10 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
             </div>
           </div>
 
-          {aiRecommendation && (
-            <div className="ai-recommendation">
-              <div className="ai-header">
-                <span className="ai-label">🤖 AI Recommendation</span>
-                <button
-                  className="btn-link btn-small"
-                  onClick={() => setAiRecommendation(null)}
-                  title="Close AI recommendation"
-                >
-                  ✕
-                </button>
-              </div>
-              <p className="ai-text">{aiRecommendation}</p>
-            </div>
-          )}
+          {/* AI Recommendation removed */}
         </div>
 
-        <div className="decision-actions">
-          <div>
-            <button
-              className="action-btn comments-action"
-              onClick={handleShowComments}
-              title="Comments"
-            >
-              💬
-            </button>
-            <div className="action-label">{comments.length}</div>
-          </div>
-
-          <div>
-            <button
-              className="action-btn ai-action"
-              onClick={handleAIRecommendation}
-              disabled={loadingAI}
-              title="AI Recommendation"
-            >
-              {loadingAI ? '🤖' : '🧠'}
-            </button>
-            <div className="action-label">AI</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Comments Modal - Works on all screen sizes */}
+        {/* Comments Modal - Works on all screen sizes */}
       {showComments && (
         <div 
           className="comments-modal-overlay"

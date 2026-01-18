@@ -90,15 +90,6 @@ function FYP({ currentUser, onLogout }) {
         </div>
       </div>
 
-      {/* Mobile navigation button (kept for compatibility) */}
-      <button
-        className="mobile-nav-button"
-        onClick={() => setShowMobileMenu(true)}
-        aria-label="Open navigation menu"
-      >
-        ☰
-      </button>
-
       {/* Mobile navigation overlay */}
       {showMobileMenu && (
         <div className="mobile-nav-overlay" onClick={() => setShowMobileMenu(false)}>

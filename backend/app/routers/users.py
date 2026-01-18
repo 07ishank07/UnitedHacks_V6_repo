@@ -150,13 +150,28 @@ async def search_users(q: Optional[str] = Query(None, description="Search query"
     if not q:
         # Return all users if no query
         users = session.exec(select(User).limit(50)).all()
-        return users
+    else:
+        # Search users by username
+        users = session.exec(
+            select(User).where(User.username.ilike(f"%{q}%")).limit(20)
+        ).all()
     
-    # Search users by username
-    users = session.exec(
-        select(User).where(User.username.ilike(f"%{q}%")).limit(20)
-    ).all()
-    return users
+    # Add followers_count to each user
+    result = []
+    for user in users:
+        followers_count = session.exec(
+            select(func.count(Follow.id)).where(Follow.following_id == user.id)
+        ).first()
+        result.append({
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "bio": user.bio,
+            "avatar_url": user.avatar_url,
+            "created_at": user.created_at.isoformat(),
+            "followers_count": followers_count or 0
+        })
+    return result
 
 @router.post("/users/{follower_id}/follow/{following_id}")
 async def follow_user(follower_id: int, following_id: int, session: Session = Depends(get_session)):
