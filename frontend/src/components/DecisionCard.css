@@ -238,6 +238,23 @@
   transform: scale(1.1);
 }
 
+.ai-action {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 18px;
+}
+
+.ai-action:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.ai-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .action-label {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
@@ -337,4 +354,32 @@
   color: rgba(255, 255, 255, 0.5);
   font-style: italic;
   padding: 16px;
+}
+
+.ai-recommendation {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 8px;
+}
+
+.ai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.ai-label {
+  color: #FF6B6B;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ai-text {
+  color: white;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
 }

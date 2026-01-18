@@ -64,36 +64,25 @@ function FYP({ currentUser }) {
   }
 
   return (
-    <div className="fyp-page">
-      <div className="page-header">
-        <h1>For You</h1>
-        <p className="page-subtitle">Discover decisions from the community</p>
-      </div>
-
-      <div className="decisions-container">
-        <div className="decisions-feed">
-          {decisions.length === 0 ? (
-            <div className="decision-wrapper">
-              <div className="decision-card-fullscreen empty-state">
-                <p>No decisions yet. Be the first to post one!</p>
-                <a href="/create" className="btn-primary">Create Decision</a>
-              </div>
+    <div className="fyp-page tiktok-style">
+      <div className="tiktok-container">
+        {decisions.length === 0 ? (
+          <div className="tiktok-slide empty-state">
+            <p>No decisions yet. Be the first to post one!</p>
+            <a href="/create" className="btn-primary">Create Decision</a>
+          </div>
+        ) : (
+          decisions.map(decision => (
+            <div key={decision.id} className="tiktok-slide">
+              <DecisionCard
+                decision={decision}
+                currentUserId={currentUser.id}
+                onVote={handleVote}
+                onDelete={handleDeleteDecision}
+              />
             </div>
-          ) : (
-            decisions.map(decision => (
-              <div key={decision.id} className="decision-wrapper">
-                <div className="decision-card-fullscreen">
-                  <DecisionCard
-                    decision={decision}
-                    currentUserId={currentUser.id}
-                    onVote={handleVote}
-                    onDelete={handleDeleteDecision}
-                  />
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+          ))
+        )}
       </div>
     </div>
   )

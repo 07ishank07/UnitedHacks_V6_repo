@@ -2,10 +2,53 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
+.fyp-page.tiktok-style {
+  background: #000;
+}
+
+.tiktok-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tiktok-slide {
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.tiktok-slide.empty-state {
+  flex-direction: column;
+  text-align: center;
+  color: white;
+}
+
+.tiktok-slide.empty-state p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+/* Hide scrollbar but keep functionality */
+.tiktok-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tiktok-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Legacy styles for non-TikTok mode */
 .page-header {
   padding: 1rem;
   text-align: center;
@@ -54,14 +97,4 @@
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-}
-
-/* Hide scrollbar but keep functionality */
-.decisions-container::-webkit-scrollbar {
-  display: none;
-}
-
-.decisions-container {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }

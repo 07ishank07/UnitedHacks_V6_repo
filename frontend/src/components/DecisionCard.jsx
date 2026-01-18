@@ -15,6 +15,8 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
   const [showComments, setShowComments] = useState(false)
   const [loadingComments, setLoadingComments] = useState(false)
   const [postingComment, setPostingComment] = useState(false)
+  const [aiRecommendation, setAiRecommendation] = useState(null)
+  const [loadingAI, setLoadingAI] = useState(false)
 
   const loadComments = async () => {
     if (comments.length > 0) return // Already loaded
@@ -83,6 +85,24 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
     }
   }
 
+  const handleAIRecommendation = async () => {
+    if (aiRecommendation) {
+      setAiRecommendation(null) // Toggle off
+      return
+    }
+
+    setLoadingAI(true)
+    try {
+      const response = await api.getConsensusRecommendation(decision.content)
+      setAiRecommendation(response.data.recommendation)
+    } catch (err) {
+      console.error('Failed to get AI recommendation:', err)
+      alert('Failed to get AI recommendation')
+    } finally {
+      setLoadingAI(false)
+    }
+  }
+
   return (
     <div className="decision-card">
       <div className="decision-header">
@@ -95,13 +115,13 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
         <span className="decision-date">
           {new Date(decision.created_at).toLocaleDateString()}
         </span>
-        {currentUserId && currentUserId === decision.user_id && (
+        {currentUserId && (decision.user?.id === currentUserId || decision.user_id === currentUserId) && (
           <button
-            className="btn-link btn-small"
+            className="btn-link btn-small delete-btn"
             onClick={handleDeleteDecision}
             title="Delete decision"
           >
-            🗑️
+            🗑️ Delete
           </button>
         )}
       </div>
@@ -148,6 +168,22 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               </div>
             )}
           </div>
+
+          {aiRecommendation && (
+            <div className="ai-recommendation">
+              <div className="ai-header">
+                <span className="ai-label">🤖 AI Recommendation</span>
+                <button
+                  className="btn-link btn-small"
+                  onClick={() => setAiRecommendation(null)}
+                  title="Close AI recommendation"
+                >
+                  ✕
+                </button>
+              </div>
+              <p className="ai-text">{aiRecommendation}</p>
+            </div>
+          )}
         </div>
 
         <div className="decision-actions">
@@ -182,6 +218,18 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               💬
             </button>
             <div className="action-label">{comments.length}</div>
+          </div>
+
+          <div>
+            <button
+              className="action-btn ai-action"
+              onClick={handleAIRecommendation}
+              disabled={loadingAI}
+              title="AI Recommendation"
+            >
+              {loadingAI ? '🤖' : '🧠'}
+            </button>
+            <div className="action-label">AI</div>
           </div>
         </div>
       </div>
