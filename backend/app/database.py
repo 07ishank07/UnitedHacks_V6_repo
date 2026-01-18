@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, create_engine, Session, text
 import os
 from dotenv import load_dotenv
-from app.models import User, Decision, Vote, Follow, Comment
+from app.models import User, Decision, Vote, Follow, Comment, CommentLike
 
 load_dotenv()
 

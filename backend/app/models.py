@@ -15,6 +15,7 @@ class User(SQLModel, table=True):
     decisions: List["Decision"] = Relationship(back_populates="user")
     votes: List["Vote"] = Relationship(back_populates="user")
     comments: List["Comment"] = Relationship(back_populates="user")
+    comment_likes: List["CommentLike"] = Relationship(back_populates="user")
     # Don't use relationships for Follow - query manually instead
     # This avoids ambiguity issues with multiple foreign keys
 
@@ -60,3 +61,14 @@ class Comment(SQLModel, table=True):
     # Relationships
     user: Optional[User] = Relationship(back_populates="comments")
     decision: Optional[Decision] = Relationship(back_populates="comments")
+    likes: List["CommentLike"] = Relationship(back_populates="comment")
+
+class CommentLike(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id")
+    comment_id: int = Field(foreign_key="comment.id")
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    # Relationships
+    user: Optional[User] = Relationship(back_populates="comment_likes")
+    comment: Optional[Comment] = Relationship(back_populates="likes")

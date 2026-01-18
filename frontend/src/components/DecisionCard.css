@@ -7,9 +7,34 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  max-width: 600px;
   width: 100%;
   margin: 0 auto;
+}
+
+/* Responsive width adjustments */
+@media (max-width: 768px) {
+  .decision-card {
+    max-width: none;
+    padding: 16px;
+  }
+}
+
+@media (min-width: 769px) {
+  .decision-card {
+    max-width: 90vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .decision-card {
+    max-width: 95vw;
+  }
+}
+
+@media (min-width: 1440px) {
+  .decision-card {
+    max-width: 98vw;
+  }
 }
 
 .decision-card:hover {
@@ -175,8 +200,36 @@
   flex: 1;
 }
 
+/* Mobile: buttons should fill nearly the whole screen */
+@media (max-width: 768px) {
+  .decision-options {
+    flex: 1;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .option {
+    flex: 1;
+    min-height: calc(50vh - 60px);
+    padding: 20px 24px;
+  }
+
+  .option-label {
+    font-size: 28px;
+    min-width: 35px;
+  }
+
+  .option-text {
+    font-size: 16px;
+  }
+
+  .percentage-number {
+    font-size: 16px;
+  }
+}
+
 /* Responsive scaling for larger screens */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .option {
     padding: 32px 40px;
     min-height: 100px;
@@ -385,6 +438,18 @@
   flex: 1;
   min-height: 40px;
   resize: vertical;
+  margin-bottom: 8px;
+}
+
+.comment-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.character-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .comment-form button {
@@ -421,9 +486,79 @@
   margin-bottom: 8px;
 }
 
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .comment-date {
   color: rgba(255, 255, 255, 0.5);
   font-size: 12px;
+}
+
+.comment-like-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.comment-like-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.comment-like-btn.liked {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: #FF6B6B;
+  color: #FF6B6B;
+}
+
+.comments-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comments-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comments-sort label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sort-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: white;
+  font-size: 12px;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #FF6B6B;
+}
+
+.comments-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .comment-content p {

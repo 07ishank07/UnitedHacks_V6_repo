@@ -70,8 +70,10 @@ export const api = {
 
   // Comments
   createComment: (commentData) => axiosInstance.post('/comments/', commentData),
-  getComments: (decisionId) => axiosInstance.get(`/comments/${decisionId}`),
+  getComments: (decisionId, params = {}) => axiosInstance.get(`/comments/${decisionId}`, { params }),
   deleteComment: (commentId) => axiosInstance.delete(`/comments/${commentId}`),
+  likeComment: (commentId) => axiosInstance.post(`/comments/${commentId}/like`),
+  unlikeComment: (commentId) => axiosInstance.delete(`/comments/${commentId}/like`),
 
   // Leaderboard
   getLeaderboard: () => axiosInstance.get('/leaderboard/'),

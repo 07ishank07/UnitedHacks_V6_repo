@@ -16,15 +16,14 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
   const [showComments, setShowComments] = useState(false)
   const [loadingComments, setLoadingComments] = useState(false)
   const [postingComment, setPostingComment] = useState(false)
+  const [commentSortBy, setCommentSortBy] = useState('newest')
   const [aiRecommendation, setAiRecommendation] = useState(null)
   const [loadingAI, setLoadingAI] = useState(false)
 
-  const loadComments = async () => {
-    if (comments.length > 0) return // Already loaded
-
+  const loadComments = async (sortBy = commentSortBy) => {
     setLoadingComments(true)
     try {
-      const response = await api.getComments(decision.id)
+      const response = await api.getComments(decision.id, { sort_by: sortBy })
       setComments(response.data)
     } catch (err) {
       console.error('Failed to load comments:', err)
@@ -103,6 +102,36 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
       alert('Failed to get AI recommendation')
     } finally {
       setLoadingAI(false)
+    }
+  }
+
+  const handleCommentSortChange = (sortBy) => {
+    setCommentSortBy(sortBy)
+    loadComments(sortBy)
+  }
+
+  const handleLikeComment = async (commentId, currentlyLiked) => {
+    try {
+      let response
+      if (currentlyLiked) {
+        response = await api.unlikeComment(commentId)
+      } else {
+        response = await api.likeComment(commentId)
+      }
+
+      // Update the comment in state
+      setComments(comments.map(comment =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              likes_count: response.data.likes_count,
+              user_liked: response.data.user_liked
+            }
+          : comment
+      ))
+    } catch (err) {
+      console.error('Failed to toggle comment like:', err)
+      alert('Failed to update comment like')
     }
   }
 
@@ -245,15 +274,42 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
                   onChange={(e) => setNewComment(e.target.value)}
                   disabled={postingComment}
                   rows={2}
+                  maxLength={500}
                 />
-                <button
-                  type="submit"
-                  className="btn-primary btn-small"
-                  disabled={postingComment || !newComment.trim()}
-                >
-                  {postingComment ? 'Posting...' : 'Post'}
-                </button>
+                <div className="comment-form-footer">
+                  <span className="character-count">
+                    {newComment.length}/500
+                  </span>
+                  <button
+                    type="submit"
+                    className="btn-primary btn-small"
+                    disabled={postingComment || !newComment.trim()}
+                  >
+                    {postingComment ? 'Posting...' : 'Post'}
+                  </button>
+                </div>
               </form>
+            )}
+
+            {comments.length > 0 && (
+              <div className="comments-controls">
+                <div className="comments-sort">
+                  <label htmlFor="comment-sort">Sort by:</label>
+                  <select
+                    id="comment-sort"
+                    value={commentSortBy}
+                    onChange={(e) => handleCommentSortChange(e.target.value)}
+                    className="sort-select"
+                  >
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="most_liked">Most Liked</option>
+                  </select>
+                </div>
+                <div className="comments-count">
+                  {comments.length} comment{comments.length !== 1 ? 's' : ''}
+                </div>
+              </div>
             )}
 
             {loadingComments ? (
@@ -275,9 +331,20 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
                           </div>
                           <span className="username">{comment.user.username}</span>
                         </Link>
-                        <span className="comment-date">
-                          {new Date(comment.created_at).toLocaleDateString()}
-                        </span>
+                        <div className="comment-meta">
+                          <span className="comment-date">
+                            {new Date(comment.created_at).toLocaleDateString()}
+                          </span>
+                          {currentUserId && (
+                            <button
+                              className={`comment-like-btn ${comment.user_liked ? 'liked' : ''}`}
+                              onClick={() => handleLikeComment(comment.id, comment.user_liked)}
+                              title={comment.user_liked ? 'Unlike comment' : 'Like comment'}
+                            >
+                              ❤️ {comment.likes_count || 0}
+                            </button>
+                          )}
+                        </div>
                         {currentUserId === comment.user_id && (
                           <button
                             className="btn-link btn-small"
