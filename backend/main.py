@@ -42,10 +42,14 @@ def status():
 
 # 4. Static Files (The "Catch-All" - MUST BE LAST)
 # This serves your React index.html to anyone visiting your URL
-frontend_build_path = os.path.join(os.path.dirname(__file__), "../frontend/dist")
+# Absolute path as defined by your Dockerfile structure
+frontend_build_path = "/app/frontend/dist"
 
 if os.path.exists(frontend_build_path):
     app.mount("/", StaticFiles(directory=frontend_build_path, html=True), name="static")
+else:
+    # This will show up in your Deploy Logs if it fails
+    print(f"DEBUG: Frontend not found at {frontend_build_path}")
 
 if __name__ == "__main__":
     import uvicorn

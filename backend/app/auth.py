@@ -8,9 +8,10 @@ from passlib.context import CryptContext
 from sqlmodel import Session, select
 from .database import get_session
 from .models import User
+import os
 
 # Security settings
-SECRET_KEY = "your-secret-key-change-in-production"  # TODO: Move to env
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production-12345")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
