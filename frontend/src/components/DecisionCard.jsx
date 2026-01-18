@@ -182,7 +182,6 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               }}
             >
               <div className="option-content">
-                <span className="option-label">A:</span>
                 <span className="option-text">{decision.option_a}</span>
               </div>
               <div className="option-votes">
@@ -211,7 +210,6 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               }}
             >
               <div className="option-content">
-                <span className="option-label">B:</span>
                 <span className="option-text">{decision.option_b}</span>
               </div>
               <div className="option-votes">

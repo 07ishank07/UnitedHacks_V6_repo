@@ -32,11 +32,11 @@ function Following({ currentUser }) {
 
   const loadRecommendedUsers = async () => {
     try {
-      // For now, load all users as recommendations
-      const response = await api.getAllUsers()
+      // Fetch all users - use empty search query to get all users
+      const response = await api.searchUsers('')
       // Filter out current user and get unique users
       const filtered = response.data.filter(u => u.id !== currentUser.id)
-      setRecommendedUsers(filtered)
+      setRecommendedUsers(filtered.slice(0, 6)) // Limit to 6 users
     } catch (err) {
       console.error('Failed to load recommended users:', err)
     }
