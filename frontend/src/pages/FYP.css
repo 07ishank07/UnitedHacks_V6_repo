@@ -9,6 +9,71 @@
   background: linear-gradient(135deg, #0a0a0a 0%, #1a0a15 100%);
 }
 
+/* Mobile Header - only visible on mobile */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(26, 10, 21, 0.6));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 107, 107, 0.2);
+  z-index: 101;
+}
+
+.mobile-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  height: 100%;
+}
+
+.mobile-header-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.mobile-header-menu {
+  background: rgba(255, 107, 107, 0.15);
+  border: 2px solid rgba(255, 107, 107, 0.4);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.mobile-header-menu:hover {
+  background: rgba(255, 107, 107, 0.25);
+  border-color: #FF6B6B;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .mobile-header {
+    display: block;
+  }
+
+  .tiktok-container {
+    margin-top: 56px;
+    height: calc(100vh - 56px);
+  }
+}
+
 /* Mobile navigation button */
 .mobile-nav-button {
   position: fixed;

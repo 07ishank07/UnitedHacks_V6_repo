@@ -76,7 +76,21 @@ function FYP({ currentUser, onLogout }) {
 
   return (
     <div className="fyp-page tiktok-style">
-      {/* Mobile navigation button */}
+      {/* Mobile Header - only visible on mobile */}
+      <div className="mobile-header">
+        <div className="mobile-header-content">
+          <h1 className="mobile-header-title">Parallel</h1>
+          <button
+            className="mobile-header-menu"
+            onClick={() => setShowMobileMenu(true)}
+            aria-label="Open navigation menu"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile navigation button (kept for compatibility) */}
       <button
         className="mobile-nav-button"
         onClick={() => setShowMobileMenu(true)}

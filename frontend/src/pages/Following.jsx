@@ -62,7 +62,7 @@ function Following({ currentUser }) {
 
   const handleFollowUser = async (userId) => {
     try {
-      await api.followUser(userId)
+      await api.followUser(currentUser.id, userId)
       setFollowedUserIds(new Set([...followedUserIds, userId]))
       // Reload decisions to show new user's decisions
       loadFollowingDecisions()
