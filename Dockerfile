@@ -1,6 +1,6 @@
 # Multi-stage build for Railway deployment
 # Stage 1: Build the frontend
-FROM node:18-alpine AS frontend-build
+FROM node:20-slim AS frontend-builder
 
 WORKDIR /app/frontend
 
@@ -24,6 +24,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy built frontend from previous stage
 COPY --from=frontend-build /app/frontend/dist ../frontend/dist
+
+# For Debian/Ubuntu based images (like python:3.11)
+RUN apt-get update && apt-get install -y libpq-dev gcc
 
 # Expose port
 EXPOSE 8000
