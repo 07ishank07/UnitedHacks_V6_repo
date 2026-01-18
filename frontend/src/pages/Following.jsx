@@ -34,9 +34,12 @@ function Following({ currentUser }) {
     try {
       // Fetch all users - use empty search query to get all users
       const response = await api.searchUsers('')
-      // Filter out current user and get unique users
-      const filtered = response.data.filter(u => u.id !== currentUser.id)
-      setRecommendedUsers(filtered.slice(0, 6)) // Limit to 6 users
+      // Filter out current user, limit to 6 users
+      const filtered = response.data
+        .filter(u => u.id !== currentUser.id)
+        .filter(u => !followedUserIds.has(u.id)) // Also filter out already followed users
+        .slice(0, 6)
+      setRecommendedUsers(filtered)
     } catch (err) {
       console.error('Failed to load recommended users:', err)
     }
@@ -64,11 +67,14 @@ function Following({ currentUser }) {
     try {
       await api.followUser(currentUser.id, userId)
       setFollowedUserIds(new Set([...followedUserIds, userId]))
-      // Reload decisions to show new user's decisions
+      // Remove the followed user from recommended list and reload decisions
+      setRecommendedUsers(recommendedUsers.filter(u => u.id !== userId))
       loadFollowingDecisions()
+      // Reload recommendations to show fresh list
+      loadRecommendedUsers()
     } catch (err) {
       console.error('Failed to follow user:', err)
-      alert('Failed to follow user')
+      alert('Failed to follow user: ' + (err.response?.data?.detail || err.message))
     }
   }
 
