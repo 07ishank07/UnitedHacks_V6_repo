@@ -17,22 +17,40 @@ else:
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
-    
+
     # Migration: Add new columns to user table if they don't exist
     with Session(engine) as session:
         try:
-            # Check if email column exists
-            result = session.exec(text("PRAGMA table_info(user)"))
-            columns = [row[1] for row in result]
-            
+            if DATABASE_URL.startswith("sqlite"):
+                # SQLite-specific migration
+                result = session.exec(text("PRAGMA table_info(user)"))
+                columns = [row[1] for row in result]
+            else:
+                # PostgreSQL and other databases
+                result = session.exec(text("""
+                    SELECT column_name
+                    FROM information_schema.columns
+                    WHERE table_name = 'user' AND table_schema = 'public'
+                """))
+                columns = [row[0] for row in result]
+
             # Add missing columns
             if "email" not in columns:
-                session.exec(text("ALTER TABLE user ADD COLUMN email VARCHAR"))
+                if DATABASE_URL.startswith("sqlite"):
+                    session.exec(text("ALTER TABLE user ADD COLUMN email VARCHAR"))
+                else:
+                    session.exec(text("ALTER TABLE \"user\" ADD COLUMN email VARCHAR"))
             if "bio" not in columns:
-                session.exec(text("ALTER TABLE user ADD COLUMN bio VARCHAR"))
+                if DATABASE_URL.startswith("sqlite"):
+                    session.exec(text("ALTER TABLE user ADD COLUMN bio VARCHAR"))
+                else:
+                    session.exec(text("ALTER TABLE \"user\" ADD COLUMN bio VARCHAR"))
             if "avatar_url" not in columns:
-                session.exec(text("ALTER TABLE user ADD COLUMN avatar_url VARCHAR"))
-            
+                if DATABASE_URL.startswith("sqlite"):
+                    session.exec(text("ALTER TABLE user ADD COLUMN avatar_url VARCHAR"))
+                else:
+                    session.exec(text("ALTER TABLE \"user\" ADD COLUMN avatar_url VARCHAR"))
+
             session.commit()
         except Exception as e:
             # If table doesn't exist yet, that's fine - it will be created by create_all

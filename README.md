@@ -76,11 +76,13 @@ npm run build
 ### Environment Variables Reference
 
 **Required**:
-- `DATABASE_URL`: PostgreSQL connection string (Railway provides this)
+- `DATABASE_URL`: PostgreSQL connection string (Railway provides this automatically when you add a PostgreSQL database)
 - `GEMINI_API_KEY`: Your Google Gemini API key
 
 **Optional**:
 - `PORT`: Railway sets this automatically (default: 8000)
+
+**Note**: For Railway deployment, set `GEMINI_API_KEY` in your Railway service environment variables. The `DATABASE_URL` is provided automatically by Railway's PostgreSQL service.
 
 ## API Endpoints
 
