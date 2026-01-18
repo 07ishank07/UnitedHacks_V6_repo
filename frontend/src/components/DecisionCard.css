@@ -161,24 +161,28 @@
 
 /* Position percentage number based on fill amount */
 .option-percentage {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
+  position: relative;
+  z-index: 2;
   transition: all 0.8s ease;
+  display: none;
 }
 
 .percentage-number {
   color: white;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   transition: all 0.8s ease;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  margin-right: 8px;
 }
 
 /* Only show percentage on selected buttons */
-.option:not(.selected) .option-percentage {
-  display: none;
+.option.selected .option-percentage {
+  display: block;
 }
 
 .option-votes {
@@ -187,6 +191,7 @@
   justify-content: center;
   position: relative;
   z-index: 2;
+  gap: 0;
 }
 
 .vote-count {
@@ -201,23 +206,25 @@
   backdrop-filter: blur(4px);
 }
 
-/* When percentage <= 50%, show on the right */
+/* Remove old absolute positioning styles */
 .option[style*="--is-majority: 0"] .option-percentage {
-  right: 32px;
+  right: auto;
+  left: auto;
 }
 
 .option[style*="--is-majority: 0"] .percentage-number {
   color: white;
 }
 
-/* When percentage > 50%, show just after the fill */
+/* Remove old fill-based positioning */
 .option[style*="--is-majority: 1"] .option-percentage {
-  left: calc(var(--vote-percentage) + 16px);
+  left: auto;
   right: auto;
 }
 
 .option[style*="--is-majority: 1"] .percentage-number {
-  color: #FF6B6B;
+  color: white;
+}
 }
 
 .option-label {

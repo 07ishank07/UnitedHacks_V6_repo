@@ -185,13 +185,13 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
                 <span className="option-text">{decision.option_a}</span>
               </div>
               <div className="option-votes">
+                {totalVotes > 0 && (
+                  <div className="option-percentage">
+                    <span className="percentage-number">{optionAPercentage}%</span>
+                  </div>
+                )}
                 <div className="vote-count">{voteCounts.option_a}</div>
               </div>
-              {totalVotes > 0 && (
-                <div className="option-percentage">
-                  <span className="percentage-number">{optionAPercentage}%</span>
-                </div>
-              )}
             </div>
             <div
               className={`option option-b ${userVote === 'option_b' ? 'selected' : ''}`}
@@ -213,13 +213,13 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
                 <span className="option-text">{decision.option_b}</span>
               </div>
               <div className="option-votes">
+                {totalVotes > 0 && (
+                  <div className="option-percentage">
+                    <span className="percentage-number">{optionBPercentage}%</span>
+                  </div>
+                )}
                 <div className="vote-count">{voteCounts.option_b}</div>
               </div>
-              {totalVotes > 0 && (
-                <div className="option-percentage">
-                  <span className="percentage-number">{optionBPercentage}%</span>
-                </div>
-              )}
             </div>
           </div>
 
