@@ -185,6 +185,9 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
                 <span className="option-label">A:</span>
                 <span className="option-text">{decision.option_a}</span>
               </div>
+              <div className="option-votes">
+                <div className="vote-count">{voteCounts.option_a}</div>
+              </div>
               {totalVotes > 0 && (
                 <div className="option-percentage">
                   <span className="percentage-number">{optionAPercentage}%</span>
@@ -210,6 +213,9 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               <div className="option-content">
                 <span className="option-label">B:</span>
                 <span className="option-text">{decision.option_b}</span>
+              </div>
+              <div className="option-votes">
+                <div className="vote-count">{voteCounts.option_b}</div>
               </div>
               {totalVotes > 0 && (
                 <div className="option-percentage">

@@ -172,6 +172,26 @@
   transition: all 0.8s ease;
 }
 
+.option-votes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.vote-count {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 8px;
+  min-width: 40px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
 /* When percentage <= 50%, show on the right */
 .option[style*="--is-majority: 0"] .option-percentage {
   right: 32px;
@@ -210,11 +230,13 @@
 @media (max-width: 768px) {
   .decision-options {
     margin-bottom: 12px;
-    gap: 14px;
+    gap: 16px;
+    flex-grow: 1;
   }
 
   .option {
-    min-height: 140px;
+    flex: 1;
+    min-height: 180px;
     padding: 20px 24px;
     flex-direction: row;
     justify-content: space-between;
@@ -223,7 +245,7 @@
   }
 
   .option-content {
-    flex-direction: row;
+    flex-direction: column;
     gap: 12px;
     flex: 1;
   }
@@ -235,12 +257,12 @@
   }
 
   .option-text {
-    font-size: 14px;
+    font-size: 15px;
     flex: 1;
   }
 
   .percentage-number {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .option[style*="--is-majority: 0"] .option-percentage {
@@ -257,7 +279,8 @@
 @media (min-width: 769px) {
   .option {
     padding: 40px 48px;
-    min-height: 120px;
+    min-height: 140px;
+    flex: 1;
   }
 
   .option-label {
@@ -272,17 +295,17 @@
 
 @media (min-width: 1024px) {
   .option {
-    padding: 48px 56px;
-    min-height: 160px;
+    padding: 52px 60px;
+    min-height: 180px;
   }
 
   .option-label {
-    font-size: 52px;
-    min-width: 65px;
+    font-size: 56px;
+    min-width: 70px;
   }
 
   .option-text {
-    font-size: 22px;
+    font-size: 24px;
   }
 }
 
@@ -372,10 +395,13 @@
   flex: 1;
   display: flex;
   gap: 20px;
+  min-height: 450px;
 }
 
 .decision-content-section {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .decision-actions {
@@ -390,6 +416,8 @@
   .decision-main {
     flex-direction: column;
     gap: 8px;
+    min-height: auto;
+    padding-right: 70px;
   }
 
   .decision-card {
@@ -398,13 +426,13 @@
 
   .decision-actions {
     position: absolute;
-    top: 16px;
+    top: 68px;
     right: 16px;
-    flex-direction: row;
+    flex-direction: column;
     width: auto;
     gap: 12px;
     margin-top: 0;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 }
 
@@ -777,12 +805,12 @@
 /* Mobile: Full height modal */
 @media (max-width: 768px) {
   .comments-modal {
-    max-height: 75vh;
+    max-height: 60vh;
     border-radius: 24px 24px 0 0;
   }
 
   .comments-modal-body {
-    max-height: 45vh;
+    max-height: 30vh;
   }
 }
 
