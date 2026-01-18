@@ -8,6 +8,38 @@
   background: #000;
 }
 
+/* Mobile navigation button */
+.mobile-nav-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 100;
+  display: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .mobile-nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .tiktok-container {
   height: 100vh;
   overflow-y: auto;

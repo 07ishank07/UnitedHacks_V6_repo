@@ -7,6 +7,9 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .decision-card:hover {
@@ -111,6 +114,39 @@
   font-size: 18px;
   font-weight: 500;
   flex: 1;
+}
+
+/* Responsive scaling for larger screens */
+@media (min-width: 768px) {
+  .option {
+    padding: 32px 40px;
+    min-height: 100px;
+  }
+
+  .option-label {
+    font-size: 40px;
+    min-width: 50px;
+  }
+
+  .option-text {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .option {
+    padding: 40px 48px;
+    min-height: 120px;
+  }
+
+  .option-label {
+    font-size: 48px;
+    min-width: 60px;
+  }
+
+  .option-text {
+    font-size: 22px;
+  }
 }
 
 .ai-predictions {

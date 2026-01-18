@@ -74,14 +74,32 @@
 }
 
 .main-content {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .main-content.fyp-main {
   max-width: none;
   padding: 0;
+}
+
+/* Wide screen optimization */
+@media (min-width: 1440px) {
+  .main-content {
+    max-width: 1400px;
+    padding: 32px;
+  }
+}
+
+/* Tablet and mobile */
+@media (max-width: 1024px) {
+  .main-content {
+    max-width: 900px;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -111,5 +129,51 @@
 
   .main-content {
     padding: 8px;
+    max-width: none;
+  }
+}
+
+/* Mobile navigation overlay for FYP */
+@media (max-width: 768px) {
+  .mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+
+  .mobile-nav-menu {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 280px;
+  }
+
+  .mobile-nav-menu .nav-links {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .mobile-nav-menu .nav-link {
+    font-size: 16px;
+    padding: 12px 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mobile-nav-menu .logout-btn {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 20px;
   }
 }

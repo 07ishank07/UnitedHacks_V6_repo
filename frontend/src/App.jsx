@@ -75,8 +75,8 @@ function App() {
             currentUser ? (
               <Layout currentUser={currentUser} onLogout={handleLogout}>
                 <Routes>
-                  <Route path="/" element={<FYP currentUser={currentUser} />} />
-                  <Route path="/fyp" element={<FYP currentUser={currentUser} />} />
+                  <Route path="/" element={<FYP currentUser={currentUser} onLogout={handleLogout} />} />
+                  <Route path="/fyp" element={<FYP currentUser={currentUser} onLogout={handleLogout} />} />
                   <Route path="/following" element={<Following currentUser={currentUser} />} />
                   <Route path="/search" element={<Search currentUser={currentUser} />} />
                   <Route path="/profile/:userId?" element={<Profile currentUser={currentUser} />} />
