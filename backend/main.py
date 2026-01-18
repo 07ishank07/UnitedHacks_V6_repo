@@ -45,3 +45,10 @@ app.include_router(about.router, prefix="/api")
 @app.get("/")
 def root():
     return {"message": "Parallel API is running", "version": "1.0.0"}
+
+if __name__ == "__main__":
+    import uvicorn
+    # Pull the port from Railway environment variables
+    port = int(os.getenv("PORT", 8000))
+    # You MUST use 0.0.0.0, not 127.0.0.1 for Railway to see it
+    uvicorn.run(app, host="0.0.0.0", port=port)

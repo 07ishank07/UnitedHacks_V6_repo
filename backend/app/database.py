@@ -7,13 +7,17 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./doomscroll.db")
 
+# Railway provides 'postgres://', but SQLAlchemy requires 'postgresql://'
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # Configure engine based on database type
 if DATABASE_URL.startswith("sqlite"):
     # check_same_thread=False is needed only for SQLite
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
     # For PostgreSQL and other databases
-    engine = create_engine(DATABASE_URL)
+    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
