@@ -3,8 +3,10 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 16px;
   transition: all 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .decision-card:hover {
@@ -171,46 +173,81 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-.vote-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.vote-btn {
+.decision-main {
   flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  display: flex;
+  gap: 20px;
 }
 
-.vote-a {
+.decision-content-section {
+  flex: 1;
+}
+
+.decision-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 80px;
+  align-items: center;
+}
+
+.action-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.vote-a-action {
   background: linear-gradient(135deg, #FF6B6B, #FF8E72);
   color: white;
 }
 
-.vote-a:hover {
-  transform: translateY(-2px);
+.vote-a-action:hover {
+  transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
 }
 
-.vote-b {
+.vote-b-action {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.vote-b:hover {
+.vote-b-action:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.comments-action {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 18px;
+}
+
+.comments-action:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.action-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
 .decision-comments {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 20px;
 }
 
 .btn-link {

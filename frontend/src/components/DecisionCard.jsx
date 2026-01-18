@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { api } from '../api'
 import './DecisionCard.css'
 
-function DecisionCard({ decision, currentUserId, onVote }) {
+function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
   const voteCounts = decision.vote_counts || { option_a: 0, option_b: 0 }
   const user = decision.user || {}
   const totalVotes = voteCounts.option_a + voteCounts.option_b
@@ -67,6 +67,22 @@ function DecisionCard({ decision, currentUserId, onVote }) {
     }
   }
 
+  const handleDeleteDecision = async () => {
+    if (!window.confirm('Are you sure you want to delete this decision? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      await api.deleteDecision(decision.id)
+      if (onDelete) {
+        onDelete(decision.id)
+      }
+    } catch (err) {
+      console.error('Failed to delete decision:', err)
+      alert('Failed to delete decision')
+    }
+  }
+
   return (
     <div className="decision-card">
       <div className="decision-header">
@@ -79,72 +95,99 @@ function DecisionCard({ decision, currentUserId, onVote }) {
         <span className="decision-date">
           {new Date(decision.created_at).toLocaleDateString()}
         </span>
+        {currentUserId && currentUserId === decision.user_id && (
+          <button
+            className="btn-link btn-small"
+            onClick={handleDeleteDecision}
+            title="Delete decision"
+          >
+            🗑️
+          </button>
+        )}
       </div>
 
-      <div className="decision-content">
-        <p>{decision.content}</p>
-      </div>
+      <div className="decision-main">
+        <div className="decision-content-section">
+          <div className="decision-content">
+            <p>{decision.content}</p>
+          </div>
 
-      <div className="decision-options">
-        <div className="option option-a">
-          <span className="option-label">A:</span>
-          <span className="option-text">{decision.option_a}</span>
-        </div>
-        <div className="option option-b">
-          <span className="option-label">B:</span>
-          <span className="option-text">{decision.option_b}</span>
-        </div>
-      </div>
-
-      <div className="decision-votes">
-        <div className="vote-stats">
-          <span className="vote-stat">{totalVotes} votes</span>
-        </div>
-        {totalVotes > 0 && (
-          <div className="vote-bars">
-            <div className="vote-bar-container">
-              <div
-                className="vote-bar vote-bar-a"
-                style={{ width: `${optionAPercentage}%` }}
-              >
-                <span>{optionAPercentage}%</span>
-              </div>
+          <div className="decision-options">
+            <div className="option option-a">
+              <span className="option-label">A:</span>
+              <span className="option-text">{decision.option_a}</span>
             </div>
-            <div className="vote-bar-container">
-              <div
-                className="vote-bar vote-bar-b"
-                style={{ width: `${optionBPercentage}%` }}
-              >
-                <span>{optionBPercentage}%</span>
-              </div>
+            <div className="option option-b">
+              <span className="option-label">B:</span>
+              <span className="option-text">{decision.option_b}</span>
             </div>
           </div>
-        )}
-        <div className="vote-buttons">
-          <button
-            className="vote-btn vote-a"
-            onClick={() => onVote(decision.id, 'option_a')}
-          >
-            {decision.option_a} ({voteCounts.option_a})
-          </button>
-          <button
-            className="vote-btn vote-b"
-            onClick={() => onVote(decision.id, 'option_b')}
-          >
-            {decision.option_b} ({voteCounts.option_b})
-          </button>
+
+          <div className="decision-votes">
+            <div className="vote-stats">
+              <span className="vote-stat">{totalVotes} votes</span>
+            </div>
+            {totalVotes > 0 && (
+              <div className="vote-bars">
+                <div className="vote-bar-container">
+                  <div
+                    className="vote-bar vote-bar-a"
+                    style={{ width: `${optionAPercentage}%` }}
+                  >
+                    <span>{optionAPercentage}%</span>
+                  </div>
+                </div>
+                <div className="vote-bar-container">
+                  <div
+                    className="vote-bar vote-bar-b"
+                    style={{ width: `${optionBPercentage}%` }}
+                  >
+                    <span>{optionBPercentage}%</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="decision-actions">
+          <div>
+            <button
+              className="action-btn vote-a-action"
+              onClick={() => onVote(decision.id, 'option_a')}
+              title={decision.option_a}
+            >
+              A
+            </button>
+            <div className="action-label">{voteCounts.option_a}</div>
+          </div>
+
+          <div>
+            <button
+              className="action-btn vote-b-action"
+              onClick={() => onVote(decision.id, 'option_b')}
+              title={decision.option_b}
+            >
+              B
+            </button>
+            <div className="action-label">{voteCounts.option_b}</div>
+          </div>
+
+          <div>
+            <button
+              className="action-btn comments-action"
+              onClick={handleShowComments}
+              title="Comments"
+            >
+              💬
+            </button>
+            <div className="action-label">{comments.length}</div>
+          </div>
         </div>
       </div>
 
-      <div className="decision-comments">
-        <button
-          className="btn-link"
-          onClick={handleShowComments}
-        >
-          {showComments ? 'Hide' : 'Show'} Comments ({comments.length})
-        </button>
-
-        {showComments && (
+      {showComments && (
+        <div className="decision-comments">
           <div className="comments-section">
             {currentUserId && (
               <form onSubmit={handlePostComment} className="comment-form">
@@ -206,8 +249,8 @@ function DecisionCard({ decision, currentUserId, onVote }) {
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

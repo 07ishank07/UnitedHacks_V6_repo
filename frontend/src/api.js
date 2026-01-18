@@ -60,6 +60,7 @@ export const api = {
   createDecision: (decisionData) => axiosInstance.post('/decisions/', decisionData),
   getDecisions: (params = {}) => axiosInstance.get('/decisions/', { params }),
   getDecision: (id) => axiosInstance.get(`/decisions/${id}`),
+  deleteDecision: (id) => axiosInstance.delete(`/decisions/${id}`),
   getConsensusRecommendation: (decisionText) => axiosInstance.get(`/decisions/recommend/${encodeURIComponent(decisionText)}`),
 
   // Votes

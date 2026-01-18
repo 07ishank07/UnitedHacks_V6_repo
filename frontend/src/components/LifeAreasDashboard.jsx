@@ -127,7 +127,7 @@ function LifeAreaCard({ area }) {
   const [animatedPercentage, setAnimatedPercentage] = useState(0)
 
   useEffect(() => {
-    // Animate the percentage
+    // Animate from 0 to target percentage
     const duration = 2000 // 2 seconds
     const steps = 60
     const increment = area.percentage / steps
@@ -135,10 +135,8 @@ function LifeAreaCard({ area }) {
 
     const timer = setInterval(() => {
       currentStep++
-      setAnimatedPercentage(prev => {
-        const next = prev + increment
-        return currentStep >= steps ? area.percentage : next
-      })
+      const nextValue = currentStep * increment
+      setAnimatedPercentage(currentStep >= steps ? area.percentage : nextValue)
 
       if (currentStep >= steps) {
         clearInterval(timer)

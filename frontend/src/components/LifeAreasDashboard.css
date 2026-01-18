@@ -216,19 +216,7 @@
   }
 }
 
-/* Animation for the donut charts */
-@keyframes donut-fill {
-  from {
-    stroke-dashoffset: 314.159;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-.donut-progress {
-  animation: donut-fill 2s ease-in-out;
-}
+/* Animation for the donut charts is handled by JavaScript */
 
 /* Custom scrollbar for recommendations */
 .recommendation-text::-webkit-scrollbar {

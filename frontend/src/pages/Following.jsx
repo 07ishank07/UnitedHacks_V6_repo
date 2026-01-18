@@ -40,6 +40,10 @@ function Following({ currentUser }) {
     }
   }
 
+  const handleDeleteDecision = (decisionId) => {
+    setDecisions(decisions.filter(d => d.id !== decisionId))
+  }
+
   if (loading) {
     return (
       <div className="page-loading">
@@ -69,6 +73,7 @@ function Following({ currentUser }) {
               decision={decision}
               currentUserId={currentUser.id}
               onVote={handleVote}
+              onDelete={handleDeleteDecision}
             />
           ))
         )}

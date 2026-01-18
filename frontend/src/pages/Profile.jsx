@@ -16,6 +16,7 @@ function Profile({ currentUser }) {
   const [loading, setLoading] = useState(true)
   const [personality, setPersonality] = useState(null)
   const [showPersonality, setShowPersonality] = useState(false)
+  const [loadingPersonality, setLoadingPersonality] = useState(false)
 
   useEffect(() => {
     loadProfile()
@@ -70,13 +71,20 @@ function Profile({ currentUser }) {
     }
 
     try {
+      setLoadingPersonality(true)
       const response = await api.getUserPersonality(profileUserId)
       setPersonality(response.data.personality_report)
       setShowPersonality(true)
     } catch (err) {
       console.error('Failed to load personality:', err)
       alert('Failed to load personality analysis')
+    } finally {
+      setLoadingPersonality(false)
     }
+  }
+
+  const handleDeleteDecision = (decisionId) => {
+    setDecisions(decisions.filter(d => d.id !== decisionId))
   }
 
   if (loading) {
@@ -143,8 +151,19 @@ function Profile({ currentUser }) {
 
       <div className="profile-content">
         {isOwnProfile && (
-          <button className="btn-secondary" onClick={loadPersonality}>
-            {showPersonality ? 'Hide' : 'View'} AI Personality Analysis
+          <button
+            className="btn-secondary"
+            onClick={loadPersonality}
+            disabled={loadingPersonality}
+          >
+            {loadingPersonality ? (
+              <>
+                <div className="spinner-small"></div>
+                Analyzing...
+              </>
+            ) : (
+              `${showPersonality ? 'Hide' : 'View'} AI Personality Analysis`
+            )}
           </button>
         )}
 
@@ -183,6 +202,7 @@ function Profile({ currentUser }) {
                       choice
                     }).then(() => loadProfile())
                   }}
+                  onDelete={handleDeleteDecision}
                 />
               ))
             )}

@@ -51,6 +51,10 @@ function Search({ currentUser }) {
     }
   }
 
+  const handleDeleteDecision = (decisionId) => {
+    setDecisions(decisions.filter(d => d.id !== decisionId))
+  }
+
   return (
     <div className="search-page">
       <div className="page-header">
@@ -113,6 +117,7 @@ function Search({ currentUser }) {
                   decision={decision}
                   currentUserId={currentUser.id}
                   onVote={handleVote}
+                  onDelete={handleDeleteDecision}
                 />
               ))
             )}

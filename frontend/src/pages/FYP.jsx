@@ -41,6 +41,10 @@ function FYP({ currentUser }) {
     }
   }
 
+  const handleDeleteDecision = (decisionId) => {
+    setDecisions(decisions.filter(d => d.id !== decisionId))
+  }
+
   if (loading) {
     return (
       <div className="page-loading">
@@ -66,22 +70,30 @@ function FYP({ currentUser }) {
         <p className="page-subtitle">Discover decisions from the community</p>
       </div>
 
-      <div className="decisions-feed">
-        {decisions.length === 0 ? (
-          <div className="empty-state">
-            <p>No decisions yet. Be the first to post one!</p>
-            <a href="/create" className="btn-primary">Create Decision</a>
-          </div>
-        ) : (
-          decisions.map(decision => (
-            <DecisionCard
-              key={decision.id}
-              decision={decision}
-              currentUserId={currentUser.id}
-              onVote={handleVote}
-            />
-          ))
-        )}
+      <div className="decisions-container">
+        <div className="decisions-feed">
+          {decisions.length === 0 ? (
+            <div className="decision-wrapper">
+              <div className="decision-card-fullscreen empty-state">
+                <p>No decisions yet. Be the first to post one!</p>
+                <a href="/create" className="btn-primary">Create Decision</a>
+              </div>
+            </div>
+          ) : (
+            decisions.map(decision => (
+              <div key={decision.id} className="decision-wrapper">
+                <div className="decision-card-fullscreen">
+                  <DecisionCard
+                    decision={decision}
+                    currentUserId={currentUser.id}
+                    onVote={handleVote}
+                    onDelete={handleDeleteDecision}
+                  />
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   )

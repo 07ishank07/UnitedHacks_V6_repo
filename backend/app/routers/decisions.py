@@ -3,7 +3,7 @@ from sqlmodel import Session, select, func
 from app.database import get_session
 from app.models import Decision, User, Vote, Follow
 from app.services.gemini import predict_consequences, generate_consensus_recommendation
-from app.auth import get_current_user_optional
+from app.auth import get_current_user_optional, get_current_user
 from typing import Optional, List
 from difflib import SequenceMatcher
 
@@ -126,6 +126,24 @@ def get_decision(decision_id: int, session: Session = Depends(get_session)):
             "option_b": option_b_count
         }
     }
+
+@router.delete("/decisions/{decision_id}")
+def delete_decision(
+    decision_id: int,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    decision = session.get(Decision, decision_id)
+    if not decision:
+        raise HTTPException(status_code=404, detail="Decision not found")
+
+    # Check if the current user owns this decision
+    if decision.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="You can only delete your own decisions")
+
+    session.delete(decision)
+    session.commit()
+    return {"message": "Decision deleted successfully"}
 
 def find_similar_decisions(decision_text: str, session: Session, limit: int = 20) -> List[dict]:
     """Find decisions similar to the given text based on content similarity."""
