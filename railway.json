@@ -1,10 +1,5 @@
 {
-  "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "cd frontend && npm install && npm run build"
-  },
   "deploy": {
-    "startCommand": "cd backend && python main.py",
     "healthcheckPath": "/api/",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
