@@ -1,32 +1,33 @@
 # Multi-stage build for Railway deployment
+
 # Stage 1: Build the frontend
 FROM node:20-slim AS frontend-builder
-
 WORKDIR /app/frontend
-
-# Copy frontend files
 COPY frontend/package*.json ./
 RUN npm install
-
 COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Python backend
 FROM python:3.11-slim
-
 WORKDIR /app/backend
+
+# --- FIX 1: Install system dependencies BEFORE pip install ---
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy backend files
 COPY backend/ ./
 
 # Install Python dependencies
+# Now that gcc and libpq-dev are installed, psycopg2 will build correctly
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy built frontend from previous stage
-COPY --from=frontend-build /app/frontend/dist ../frontend/dist
-
-# For Debian/Ubuntu based images (like python:3.11)
-RUN apt-get update && apt-get install -y libpq-dev gcc
+# --- FIX 2: Correct the stage name (added 'er' to frontend-builder) ---
+# Also, ensure the destination path exists or matches your app's structure
+COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
 
 # Expose port
 EXPOSE 8000
