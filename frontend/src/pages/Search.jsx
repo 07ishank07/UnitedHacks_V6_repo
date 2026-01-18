@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { api } from '../api'
 import DecisionCard from '../components/DecisionCard'
 import './Search.css'
@@ -9,6 +10,67 @@ function Search({ currentUser }) {
   const [decisions, setDecisions] = useState([])
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(false)
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query)
+    }, 300) // 300ms delay
+
+    return () => clearTimeout(timer)
+  }, [query])
+
+  // Live search effect
+  useEffect(() => {
+    const performSearch = async () => {
+      if (!debouncedQuery.trim()) {
+        // Load recommendations when no query
+        loadRecommendations()
+        return
+      }
+
+      setLoading(true)
+      try {
+        if (searchType === 'decisions') {
+          const response = await api.getDecisions({ search: debouncedQuery })
+          setDecisions(response.data)
+          setUsers([])
+        } else {
+          const response = await api.searchUsers(debouncedQuery)
+          setUsers(response.data)
+          setDecisions([])
+        }
+      } catch (err) {
+        console.error('Search failed:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    performSearch()
+  }, [debouncedQuery, searchType])
+
+  const loadRecommendations = async () => {
+    setLoading(true)
+    try {
+      if (searchType === 'decisions') {
+        // Load trending decisions (recent with most votes)
+        const response = await api.getDecisions({ limit: 20 })
+        setDecisions(response.data)
+        setUsers([])
+      } else {
+        // Load popular users (with most followers)
+        const response = await api.searchUsers('')
+        setUsers(response.data)
+        setDecisions([])
+      }
+    } catch (err) {
+      console.error('Failed to load recommendations:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -106,16 +168,23 @@ function Search({ currentUser }) {
               <div className="empty-state">
                 <p>No decisions found matching "{query}"</p>
               </div>
+            ) : decisions.length === 0 && !query ? (
+              <div className="empty-state">
+                <p>Loading recommendations...</p>
+              </div>
             ) : (
-              decisions.map(decision => (
-                <DecisionCard
-                  key={decision.id}
-                  decision={decision}
-                  currentUserId={currentUser.id}
-                  onVote={handleVote}
-                  onDelete={handleDeleteDecision}
-                />
-              ))
+              <>
+                {!query && <h2 className="section-title">Trending Decisions</h2>}
+                {decisions.map(decision => (
+                  <DecisionCard
+                    key={decision.id}
+                    decision={decision}
+                    currentUserId={currentUser.id}
+                    onVote={handleVote}
+                    onDelete={handleDeleteDecision}
+                  />
+                ))}
+              </>
             )}
           </div>
         ) : (
@@ -124,22 +193,29 @@ function Search({ currentUser }) {
               <div className="empty-state">
                 <p>No users found matching "{query}"</p>
               </div>
+            ) : users.length === 0 && !query ? (
+              <div className="empty-state">
+                <p>Loading recommendations...</p>
+              </div>
             ) : (
-              users.map(user => (
-                <Link
-                  key={user.id}
-                  to={`/profile/${user.id}`}
-                  className="user-card"
-                >
-                  <div className="user-avatar">
-                    {user.username.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="user-info">
-                    <div className="user-username">{user.username}</div>
-                    {user.bio && <div className="user-bio">{user.bio}</div>}
-                  </div>
-                </Link>
-              ))
+              <>
+                {!query && <h2 className="section-title">Popular Users</h2>}
+                {users.map(user => (
+                  <Link
+                    key={user.id}
+                    to={`/profile/${user.id}`}
+                    className="user-card"
+                  >
+                    <div className="user-avatar">
+                      {user.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="user-info">
+                      <div className="user-username">{user.username}</div>
+                      {user.bio && <div className="user-bio">{user.bio}</div>}
+                    </div>
+                  </Link>
+                ))}
+              </>
             )}
           </div>
         )}
