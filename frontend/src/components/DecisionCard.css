@@ -208,7 +208,7 @@
   }
 
   .option {
-    min-height: 120px;
+    min-height: 300px; /* 150% increase from 120px */
     padding: 20px 24px;
   }
 
@@ -246,7 +246,7 @@
 @media (min-width: 1024px) {
   .option {
     padding: 40px 48px;
-    min-height: 120px;
+    min-height: 162px; /* 35% increase from 120px for 30-40% more screen fit */
   }
 
   .option-label {
