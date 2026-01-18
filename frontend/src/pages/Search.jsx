@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { api } from '../api'
 import DecisionCard from '../components/DecisionCard'
 import './Search.css'
@@ -62,15 +61,8 @@ function Search({ currentUser }) {
   return (
     <div className="search-page">
       <div className="page-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1>Search</h1>
-            <p className="page-subtitle">Find decisions or users</p>
-          </div>
-          <Link to="/settings" className="btn-secondary" style={{ textDecoration: 'none' }}>
-            Settings
-          </Link>
-        </div>
+        <h1>Search</h1>
+        <p className="page-subtitle">Find decisions or users</p>
       </div>
 
       <div className="search-form-container">

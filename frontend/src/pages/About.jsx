@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import './About.css'
 
 function About() {
   const [aboutInfo, setAboutInfo] = useState(null)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadAbout()
@@ -32,7 +34,16 @@ function About() {
   return (
     <div className="about-page">
       <div className="page-header">
-        <h1>About Parallel</h1>
+        <div className="header-with-back">
+          <button 
+            className="btn-back"
+            onClick={() => navigate(-1)}
+            title="Go back"
+          >
+            ← Back
+          </button>
+          <h1>About Parallel</h1>
+        </div>
       </div>
 
       <div className="about-content">
