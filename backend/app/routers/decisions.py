@@ -33,6 +33,7 @@ def read_decisions(
     user_id: Optional[int] = None,
     following_user_id: Optional[int] = None,  # Get decisions from users this user follows
     search: Optional[str] = None,
+    current_user: Optional[User] = Depends(get_current_user_optional),
     session: Session = Depends(get_session)
 ):
     """Get decisions feed - supports filtering by user, following, or search"""
@@ -84,6 +85,19 @@ def read_decisions(
         ).first() or 0
 
         user = session.get(User, decision.user_id)
+
+        # Get current user's vote if logged in
+        user_vote = None
+        if current_user:
+            user_vote_record = session.exec(
+                select(Vote).where(
+                    Vote.decision_id == decision.id,
+                    Vote.user_id == current_user.id
+                )
+            ).first()
+            if user_vote_record:
+                user_vote = user_vote_record.choice
+
         result.append({
             **decision.dict(),
             "user": user.dict() if user else None,
@@ -91,17 +105,22 @@ def read_decisions(
                 "total": vote_counts,
                 "option_a": option_a_count,
                 "option_b": option_b_count
-            }
+            },
+            "user_vote": user_vote
         })
     
     return result
 
 @router.get("/decisions/{decision_id}")
-def get_decision(decision_id: int, session: Session = Depends(get_session)):
+def get_decision(
+    decision_id: int,
+    current_user: Optional[User] = Depends(get_current_user_optional),
+    session: Session = Depends(get_session)
+):
     decision = session.get(Decision, decision_id)
     if not decision:
         raise HTTPException(status_code=404, detail="Decision not found")
-    
+
     # Get vote counts
     option_a_count = session.exec(
         select(func.count(Vote.id)).where(
@@ -118,13 +137,26 @@ def get_decision(decision_id: int, session: Session = Depends(get_session)):
 
     user = session.get(User, decision.user_id)
 
+    # Get current user's vote if logged in
+    user_vote = None
+    if current_user:
+        user_vote_record = session.exec(
+            select(Vote).where(
+                Vote.decision_id == decision_id,
+                Vote.user_id == current_user.id
+            )
+        ).first()
+        if user_vote_record:
+            user_vote = user_vote_record.choice
+
     return {
         **decision.dict(),
         "user": user.dict() if user else None,
         "vote_counts": {
             "option_a": option_a_count,
             "option_b": option_b_count
-        }
+        },
+        "user_vote": user_vote
     }
 
 @router.delete("/decisions/{decision_id}")
@@ -133,16 +165,22 @@ def delete_decision(
     current_user: User = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
+    print(f"Delete request: decision_id={decision_id}, current_user.id={current_user.id}")
     decision = session.get(Decision, decision_id)
     if not decision:
+        print(f"Decision {decision_id} not found")
         raise HTTPException(status_code=404, detail="Decision not found")
+
+    print(f"Decision found: user_id={decision.user_id}, current_user.id={current_user.id}")
 
     # Check if the current user owns this decision
     if decision.user_id != current_user.id:
+        print(f"Ownership check failed: decision.user_id={decision.user_id} != current_user.id={current_user.id}")
         raise HTTPException(status_code=403, detail="You can only delete your own decisions")
 
     session.delete(decision)
     session.commit()
+    print(f"Decision {decision_id} deleted successfully")
     return {"message": "Decision deleted successfully"}
 
 def find_similar_decisions(decision_text: str, session: Session, limit: int = 20) -> List[dict]:

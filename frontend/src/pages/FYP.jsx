@@ -28,16 +28,22 @@ function FYP({ currentUser }) {
 
   const handleVote = async (decisionId, choice) => {
     try {
-      await api.createVote({
-        user_id: currentUser.id,
-        decision_id: decisionId,
-        choice
-      })
-      // Reload decisions to get updated vote counts
+      if (choice === null) {
+        // Remove vote
+        await api.deleteVote(decisionId)
+      } else {
+        // Create or update vote
+        await api.createVote({
+          user_id: currentUser.id,
+          decision_id: decisionId,
+          choice
+        })
+      }
+      // Reload decisions to get updated vote counts and user votes
       loadDecisions()
     } catch (err) {
       console.error('Failed to vote:', err)
-      alert('Failed to vote or you already voted on this decision')
+      alert('Failed to update vote')
     }
   }
 

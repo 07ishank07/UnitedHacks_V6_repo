@@ -6,6 +6,7 @@ import './DecisionCard.css'
 function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
   const voteCounts = decision.vote_counts || { option_a: 0, option_b: 0 }
   const user = decision.user || {}
+  const userVote = decision.user_vote
   const totalVotes = voteCounts.option_a + voteCounts.option_b
   const optionAPercentage = totalVotes > 0 ? Math.round((voteCounts.option_a / totalVotes) * 100) : 0
   const optionBPercentage = totalVotes > 0 ? Math.round((voteCounts.option_b / totalVotes) * 100) : 0
@@ -74,6 +75,8 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
       return
     }
 
+    console.log('Deleting decision:', decision.id, 'currentUserId:', currentUserId, 'decision.user_id:', decision.user_id, 'decision.user?.id:', decision.user?.id)
+
     try {
       await api.deleteDecision(decision.id)
       if (onDelete) {
@@ -81,7 +84,7 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
       }
     } catch (err) {
       console.error('Failed to delete decision:', err)
-      alert('Failed to delete decision')
+      alert('Failed to delete decision: ' + (err.response?.data?.detail || err.message))
     }
   }
 
@@ -133,11 +136,33 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
           </div>
 
           <div className="decision-options">
-            <div className="option option-a">
+            <div
+              className={`option option-a ${userVote === 'option_a' ? 'selected' : ''}`}
+              onClick={() => onVote(decision.id, userVote === 'option_a' ? null : 'option_a')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onVote(decision.id, userVote === 'option_a' ? null : 'option_a')
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
               <span className="option-label">A:</span>
               <span className="option-text">{decision.option_a}</span>
             </div>
-            <div className="option option-b">
+            <div
+              className={`option option-b ${userVote === 'option_b' ? 'selected' : ''}`}
+              onClick={() => onVote(decision.id, userVote === 'option_b' ? null : 'option_b')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onVote(decision.id, userVote === 'option_b' ? null : 'option_b')
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
               <span className="option-label">B:</span>
               <span className="option-text">{decision.option_b}</span>
             </div>

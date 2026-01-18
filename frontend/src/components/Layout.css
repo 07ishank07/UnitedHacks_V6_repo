@@ -79,24 +79,37 @@
   padding: 24px;
 }
 
+.main-content.fyp-main {
+  max-width: none;
+  padding: 0;
+}
+
 @media (max-width: 768px) {
   .top-nav {
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px 16px;
+    padding: 8px 12px;
+  }
+
+  .logo {
+    font-size: 18px;
   }
 
   .nav-links {
-    width: 100%;
+    flex: 1;
     justify-content: center;
+    gap: 4px;
   }
 
   .nav-link {
-    font-size: 14px;
-    padding: 6px 12px;
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .logout-btn {
+    font-size: 12px;
+    padding: 4px 8px;
   }
 
   .main-content {
-    padding: 16px;
+    padding: 8px;
   }
 }

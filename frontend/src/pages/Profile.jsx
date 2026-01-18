@@ -194,13 +194,23 @@ function Profile({ currentUser }) {
                   key={decision.id}
                   decision={decision}
                   currentUserId={currentUser.id}
-                  onVote={(decisionId, choice) => {
-                    // Reload profile decisions after voting
-                    api.createVote({
-                      user_id: currentUser.id,
-                      decision_id: decisionId,
-                      choice
-                    }).then(() => loadProfile())
+                  onVote={async (decisionId, choice) => {
+                    // Handle voting/removing vote and reload profile decisions
+                    try {
+                      if (choice === null) {
+                        await api.deleteVote(decisionId)
+                      } else {
+                        await api.createVote({
+                          user_id: currentUser.id,
+                          decision_id: decisionId,
+                          choice
+                        })
+                      }
+                      loadProfile()
+                    } catch (err) {
+                      console.error('Failed to vote:', err)
+                      alert('Failed to update vote')
+                    }
                   }}
                   onDelete={handleDeleteDecision}
                 />

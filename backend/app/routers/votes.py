@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select, func
 from app.database import get_session
 from app.models import Vote, Decision
+from app.auth import get_current_user
 
 router = APIRouter()
 
@@ -13,7 +14,11 @@ async def create_vote(vote: Vote, session: Session = Depends(get_session)):
     ).first()
 
     if existing_vote:
-        raise HTTPException(status_code=400, detail="User already voted on this decision")
+        # Update existing vote
+        existing_vote.choice = vote.choice
+        session.commit()
+        session.refresh(existing_vote)
+        return existing_vote
 
     session.add(vote)
     session.commit()
@@ -36,3 +41,24 @@ async def get_vote_counts(decision_id: int, session: Session = Depends(get_sessi
         "option_a": option_a_count or 0,
         "option_b": option_b_count or 0
     }
+
+@router.delete("/votes/{decision_id}")
+async def delete_vote(
+    decision_id: int,
+    current_user = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    # Find and delete the user's vote for this decision
+    vote = session.exec(
+        select(Vote).where(
+            Vote.user_id == current_user.id,
+            Vote.decision_id == decision_id
+        )
+    ).first()
+
+    if not vote:
+        raise HTTPException(status_code=404, detail="Vote not found")
+
+    session.delete(vote)
+    session.commit()
+    return {"message": "Vote removed successfully"}

@@ -28,15 +28,19 @@ function Following({ currentUser }) {
 
   const handleVote = async (decisionId, choice) => {
     try {
-      await api.createVote({
-        user_id: currentUser.id,
-        decision_id: decisionId,
-        choice
-      })
+      if (choice === null) {
+        await api.deleteVote(decisionId)
+      } else {
+        await api.createVote({
+          user_id: currentUser.id,
+          decision_id: decisionId,
+          choice
+        })
+      }
       loadFollowingDecisions()
     } catch (err) {
       console.error('Failed to vote:', err)
-      alert('Failed to vote or you already voted on this decision')
+      alert('Failed to update vote')
     }
   }
 

@@ -67,28 +67,50 @@
 }
 
 .decision-options {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .option {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
+  gap: 16px;
+  padding: 24px 32px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-height: 80px;
+}
+
+.option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.option.selected {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: #FF6B6B;
+  box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
 }
 
 .option-label {
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
-  min-width: 16px;
+  font-weight: 700;
+  font-size: 32px;
+  color: rgba(255, 255, 255, 0.9);
+  min-width: 40px;
+  text-align: center;
 }
 
 .option-text {
   color: white;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 500;
+  flex: 1;
 }
 
 .ai-predictions {

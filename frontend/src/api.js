@@ -65,6 +65,7 @@ export const api = {
 
   // Votes
   createVote: (voteData) => axiosInstance.post('/votes/', voteData),
+  deleteVote: (decisionId) => axiosInstance.delete(`/votes/${decisionId}`),
   getVoteCounts: (decisionId) => axiosInstance.get(`/votes/${decisionId}`),
 
   // Comments
