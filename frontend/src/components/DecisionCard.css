@@ -115,7 +115,7 @@
   padding: 24px 32px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.15);
   transition: all 0.2s ease;
   cursor: pointer;
   min-height: 80px;
@@ -128,15 +128,15 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: var(--vote-percentage, 0%);
-  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  width: 0%;
+  background: linear-gradient(135deg, rgba(200, 200, 200, 0.3), rgba(180, 180, 180, 0.2));
   transition: width 0.8s ease;
   z-index: 1;
 }
 
 .option:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
 }
 
@@ -144,6 +144,10 @@
   background: rgba(255, 107, 107, 0.2);
   border-color: #FF6B6B;
   box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+}
+
+.option.selected::before {
+  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
 }
 
 .option-content {
@@ -170,6 +174,11 @@
   font-size: 18px;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   transition: all 0.8s ease;
+}
+
+/* Only show percentage on selected buttons */
+.option:not(.selected) .option-percentage {
+  display: none;
 }
 
 .option-votes {

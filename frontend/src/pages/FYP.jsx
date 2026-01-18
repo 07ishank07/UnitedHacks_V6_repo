@@ -42,8 +42,10 @@ function FYP({ currentUser, onLogout }) {
           choice
         })
       }
-      // Reload decisions to get updated vote counts and user votes
-      loadDecisions()
+      // Update the specific decision in state without reloading all
+      const updatedResponse = await api.getDecisions()
+      const updatedDecision = updatedResponse.data.find(d => d.id === decisionId)
+      setDecisions(decisions.map(d => d.id === decisionId ? updatedDecision : d))
     } catch (err) {
       console.error('Failed to vote:', err)
       alert('Failed to update vote')

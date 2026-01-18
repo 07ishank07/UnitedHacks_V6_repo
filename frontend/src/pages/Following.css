@@ -2,8 +2,133 @@
   width: 100%;
 }
 
+.following-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Recommended Users Section */
+.recommended-section {
+  margin-bottom: 40px;
+}
+
+.recommended-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.recommended-users {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.recommended-user-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.recommended-user-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 107, 107, 0.3);
+  transform: translateY(-4px);
+}
+
+.user-avatar-large {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 24px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.recommended-user-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: white;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.user-stats {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-follow {
+  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: auto;
+}
+
+.btn-follow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.btn-follow:active {
+  transform: translateY(0);
+}
+
+/* Decisions Section */
+.decisions-section {
+  margin-top: 40px;
+}
+
+.decisions-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: white;
+}
+
 .decisions-feed {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .recommended-users {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .recommended-user-card {
+    padding: 16px;
+  }
+
+  .user-avatar-large {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+
+  .recommended-user-card h3 {
+    font-size: 14px;
+  }
 }
