@@ -335,6 +335,7 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }
