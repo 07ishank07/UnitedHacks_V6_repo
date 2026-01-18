@@ -262,121 +262,92 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
         </div>
       </div>
 
+      {/* Comments Modal - Works on all screen sizes */}
       {showComments && (
-        <>
-          {/* Mobile Comments Modal */}
-          <div 
-            className={`comments-modal-overlay ${showComments ? 'active' : ''}`}
-            onClick={() => setShowComments(false)}
-          >
-            <div className="comments-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="comments-modal-header">
-                <h3>Comments ({comments.length})</h3>
-                <button 
-                  className="comments-modal-close"
-                  onClick={() => setShowComments(false)}
-                  title="Close comments"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="comments-modal-content">
-                <div className="comments-modal-list">
-                  {loadingComments ? (
-                    <div className="loading-comments">
-                      <div className="spinner-small"></div>
-                      Loading comments...
-                    </div>
-                  ) : comments.length === 0 ? (
-                    <p className="no-comments">No comments yet. Be the first to share!</p>
-                  ) : (
-                    <div className="comments-list">
-                      {comments.map(comment => (
-                        <div key={comment.id} className="comment">
-                          <div className="comment-header">
-                            <div className="comment-meta">
-                              <span className="comment-author">{comment.user.username}</span>
-                              <span className="comment-date">
-                                {new Date(comment.created_at).toLocaleDateString()}
-                              </span>
-                            </div>
-                            {currentUserId === comment.user_id && (
-                              <button
-                                className="comment-delete-btn"
-                                onClick={() => handleDeleteComment(comment.id)}
-                                title="Delete comment"
-                              >
-                                ✕
-                              </button>
-                            )}
-                          </div>
-                          <div className="comment-content">
-                            <p>{comment.content}</p>
-                          </div>
-                          {currentUserId && (
-                            <button
-                              className={`comment-like-btn ${comment.user_liked ? 'liked' : ''}`}
-                              onClick={() => handleLikeComment(comment.id, comment.user_liked)}
-                              title={comment.user_liked ? 'Unlike comment' : 'Like comment'}
-                            >
-                              ❤️ {comment.likes_count || 0}
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
+        <div 
+          className="comments-modal-overlay"
+          onClick={() => setShowComments(false)}
+        >
+          <div className="comments-modal" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="comments-modal-header">
+              <h3>Comments</h3>
+              <button 
+                className="comments-modal-close"
+                onClick={() => setShowComments(false)}
+                title="Close comments"
+              >
+                ✕
+              </button>
+            </div>
 
-              {currentUserId && (
-                <div className="comments-modal-form">
-                  <form onSubmit={handlePostComment} className="comment-form">
-                    <textarea
-                      className="input-field"
-                      placeholder="Add a comment..."
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      disabled={postingComment}
-                      maxLength={500}
-                    />
-                    <div className="comment-form-footer">
-                      <span className="character-count">
-                        {newComment.length}/500
-                      </span>
-                      <button
-                        type="submit"
-                        className="btn-primary btn-small"
-                        disabled={postingComment || !newComment.trim()}
-                      >
-                        {postingComment ? 'Posting...' : 'Post'}
-                      </button>
+            {/* Scrollable Comments List */}
+            <div className="comments-modal-body">
+              {loadingComments ? (
+                <div className="loading-comments">
+                  <div className="spinner-small"></div>
+                  <p>Loading comments...</p>
+                </div>
+              ) : comments.length === 0 ? (
+                <p className="no-comments">No comments yet. Be the first to share!</p>
+              ) : (
+                <div className="comments-list">
+                  {comments.map(comment => (
+                    <div key={comment.id} className="comment">
+                      <div className="comment-header">
+                        <div className="comment-user-info">
+                          <div className="comment-avatar">
+                            {comment.user.username?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                          <div className="comment-meta">
+                            <Link to={`/profile/${comment.user.id}`} className="comment-author">
+                              {comment.user.username}
+                            </Link>
+                            <span className="comment-date">
+                              {new Date(comment.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                        {currentUserId === comment.user_id && (
+                          <button
+                            className="comment-delete-btn"
+                            onClick={() => handleDeleteComment(comment.id)}
+                            title="Delete comment"
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+                      <div className="comment-content">
+                        <p>{comment.content}</p>
+                      </div>
+                      {currentUserId && (
+                        <button
+                          className={`comment-like-btn ${comment.user_liked ? 'liked' : ''}`}
+                          onClick={() => handleLikeComment(comment.id, comment.user_liked)}
+                        >
+                          ❤️ {comment.likes_count || 0}
+                        </button>
+                      )}
                     </div>
-                  </form>
+                  ))}
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Desktop Comments Section (below buttons) */}
-          <div className="decision-comments">
-            <div className="comments-section">
-              {currentUserId && (
+            {/* Comment Form Footer */}
+            {currentUserId && (
+              <div className="comments-modal-footer">
                 <form onSubmit={handlePostComment} className="comment-form">
                   <textarea
-                    className="input-field"
                     placeholder="Add a comment..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     disabled={postingComment}
-                    rows={2}
                     maxLength={500}
                   />
-                  <div className="comment-form-footer">
-                    <span className="character-count">
-                      {newComment.length}/500
-                    </span>
+                  <div className="comment-form-controls">
+                    <span className="character-count">{newComment.length}/500</span>
                     <button
                       type="submit"
                       className="btn-primary btn-small"
@@ -386,81 +357,10 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
                     </button>
                   </div>
                 </form>
-              )}
-
-              {comments.length > 0 && (
-                <div className="comments-controls">
-                  <div className="comments-sort">
-                  <select
-                      id="comment-sort"
-                      value={commentSortBy}
-                      onChange={(e) => handleCommentSortChange(e.target.value)}
-                      className="sort-select"
-                    >
-                      <option value="newest">Newest</option>
-                      <option value="oldest">Oldest</option>
-                      <option value="most_liked">Most Liked</option>
-                    </select>
-                  </div>
-                  <div className="comments-count">
-                    {comments.length} comment{comments.length !== 1 ? 's' : ''}
-                  </div>
-                </div>
-              )}
-
-              {loadingComments ? (
-                <div className="loading-comments">
-                  <div className="spinner-small"></div>
-                  Loading comments...
-                </div>
-              ) : (
-                <div className="comments-list">
-                  {comments.length === 0 ? (
-                    <p className="no-comments">No comments yet.</p>
-                  ) : (
-                    comments.map(comment => (
-                      <div key={comment.id} className="comment">
-                        <div className="comment-header">
-                          <Link to={`/profile/${comment.user.id}`} className="user-link">
-                            <div className="user-avatar-small">
-                              {comment.user.username?.charAt(0).toUpperCase() || 'U'}
-                            </div>
-                            <span className="username">{comment.user.username}</span>
-                          </Link>
-                          <div className="comment-meta">
-                            <span className="comment-date">
-                              {new Date(comment.created_at).toLocaleDateString()}
-                            </span>
-                            {currentUserId && (
-                              <button
-                                className={`comment-like-btn ${comment.user_liked ? 'liked' : ''}`}
-                                onClick={() => handleLikeComment(comment.id, comment.user_liked)}
-                                title={comment.user_liked ? 'Unlike comment' : 'Like comment'}
-                              >
-                                ❤️ {comment.likes_count || 0}
-                              </button>
-                            )}
-                          </div>
-                          {currentUserId === comment.user_id && (
-                            <button
-                              className="btn-link btn-small"
-                              onClick={() => handleDeleteComment(comment.id)}
-                            >
-                              Delete
-                            </button>
-                          )}
-                        </div>
-                        <div className="comment-content">
-                          <p>{comment.content}</p>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
-        </>
+        </div>
       )}
     </div>
   )
