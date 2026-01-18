@@ -77,6 +77,7 @@
 }
 
 .option {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -87,6 +88,19 @@
   transition: all 0.2s ease;
   cursor: pointer;
   min-height: 80px;
+  overflow: hidden;
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--vote-percentage, 0%);
+  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
+  transition: width 0.8s ease;
+  z-index: 1;
 }
 
 .option:hover {
@@ -99,6 +113,51 @@
   background: rgba(255, 107, 107, 0.2);
   border-color: #FF6B6B;
   box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+}
+
+.option-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+/* Position percentage number based on fill amount */
+.option-percentage {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  transition: all 0.8s ease;
+}
+
+.percentage-number {
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.8s ease;
+}
+
+/* When percentage <= 50%, show on the right */
+.option[style*="--is-majority: 0"] .option-percentage {
+  right: 32px;
+}
+
+.option[style*="--is-majority: 0"] .percentage-number {
+  color: white;
+}
+
+/* When percentage > 50%, show just after the fill */
+.option[style*="--is-majority: 1"] .option-percentage {
+  left: calc(var(--vote-percentage) + 16px);
+  right: auto;
+}
+
+.option[style*="--is-majority: 1"] .percentage-number {
+  color: #FF6B6B;
 }
 
 .option-label {
@@ -249,40 +308,7 @@
   align-items: center;
 }
 
-.action-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  position: relative;
-}
 
-.vote-a-action {
-  background: linear-gradient(135deg, #FF6B6B, #FF8E72);
-  color: white;
-}
-
-.vote-a-action:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-}
-
-.vote-b-action {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.vote-b-action:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
 
 .comments-action {
   background: rgba(255, 255, 255, 0.1);

@@ -147,9 +147,20 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               }}
               role="button"
               tabIndex={0}
+              style={{
+                '--vote-percentage': `${optionAPercentage}%`,
+                '--is-majority': optionAPercentage > 50 ? '1' : '0'
+              }}
             >
-              <span className="option-label">A:</span>
-              <span className="option-text">{decision.option_a}</span>
+              <div className="option-content">
+                <span className="option-label">A:</span>
+                <span className="option-text">{decision.option_a}</span>
+              </div>
+              {totalVotes > 0 && (
+                <div className="option-percentage">
+                  <span className="percentage-number">{optionAPercentage}%</span>
+                </div>
+              )}
             </div>
             <div
               className={`option option-b ${userVote === 'option_b' ? 'selected' : ''}`}
@@ -162,36 +173,21 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
               }}
               role="button"
               tabIndex={0}
+              style={{
+                '--vote-percentage': `${optionBPercentage}%`,
+                '--is-majority': optionBPercentage > 50 ? '1' : '0'
+              }}
             >
-              <span className="option-label">B:</span>
-              <span className="option-text">{decision.option_b}</span>
-            </div>
-          </div>
-
-          <div className="decision-votes">
-            <div className="vote-stats">
-              <span className="vote-stat">{totalVotes} votes</span>
-            </div>
-            {totalVotes > 0 && (
-              <div className="vote-bars">
-                <div className="vote-bar-container">
-                  <div
-                    className="vote-bar vote-bar-a"
-                    style={{ width: `${optionAPercentage}%` }}
-                  >
-                    <span>{optionAPercentage}%</span>
-                  </div>
-                </div>
-                <div className="vote-bar-container">
-                  <div
-                    className="vote-bar vote-bar-b"
-                    style={{ width: `${optionBPercentage}%` }}
-                  >
-                    <span>{optionBPercentage}%</span>
-                  </div>
-                </div>
+              <div className="option-content">
+                <span className="option-label">B:</span>
+                <span className="option-text">{decision.option_b}</span>
               </div>
-            )}
+              {totalVotes > 0 && (
+                <div className="option-percentage">
+                  <span className="percentage-number">{optionBPercentage}%</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {aiRecommendation && (
@@ -212,28 +208,6 @@ function DecisionCard({ decision, currentUserId, onVote, onDelete }) {
         </div>
 
         <div className="decision-actions">
-          <div>
-            <button
-              className="action-btn vote-a-action"
-              onClick={() => onVote(decision.id, 'option_a')}
-              title={decision.option_a}
-            >
-              A
-            </button>
-            <div className="action-label">{voteCounts.option_a}</div>
-          </div>
-
-          <div>
-            <button
-              className="action-btn vote-b-action"
-              onClick={() => onVote(decision.id, 'option_b')}
-              title={decision.option_b}
-            >
-              B
-            </button>
-            <div className="action-label">{voteCounts.option_b}</div>
-          </div>
-
           <div>
             <button
               className="action-btn comments-action"
