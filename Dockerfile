@@ -12,7 +12,7 @@ RUN npm run build
 FROM python:3.11-slim
 WORKDIR /app/backend
 
-# --- FIX 1: Install system dependencies BEFORE pip install ---
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
@@ -22,11 +22,9 @@ RUN apt-get update && apt-get install -y \
 COPY backend/ ./
 
 # Install Python dependencies
-# Now that gcc and libpq-dev are installed, psycopg2 will build correctly
 RUN pip install --no-cache-dir -r requirements.txt
 
-# --- FIX 2: Correct the stage name (added 'er' to frontend-builder) ---
-# Also, ensure the destination path exists or matches your app's structure
+# Copy built frontend from previous stage
 COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
 
 # Expose port
